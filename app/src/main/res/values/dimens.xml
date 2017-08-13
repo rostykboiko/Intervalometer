@@ -1,0 +1,96 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_size_title">24sp</dimen>
+    <dimen name="text_size_standard">16sp</dimen>
+    <dimen name="text_size_secondary">14sp</dimen>
+    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="field_width_standard">160dp</dimen>
+    <dimen name="zero">0dp</dimen>
+
+    <!-- Margins-->
+    <dimen name="margin_zero">0dp</dimen>
+    <dimen name="margin_1dp">1dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_switch">14dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_tab">72dp</dimen>
+    <dimen name="margin_toolbar">70dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="icon_top_margin">24dp</dimen>
+    <dimen name="icon_bottom_margin">24dp</dimen>
+    <dimen name="title_bottom_margin">16dp</dimen>
+
+    <!-- Intro -->
+    <dimen name="dots_height">30dp</dimen>
+    <dimen name="dots_margin_bottom">20dp</dimen>
+    <dimen name="img_width_height">120dp</dimen>
+    <dimen name="slide_title">30dp</dimen>
+    <dimen name="slide_desc">16dp</dimen>
+    <dimen name="desc_padding">40dp</dimen>
+
+    <!-- Card Dimens -->
+    <dimen name="card_height">400dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_margin">2dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
+    <dimen name="card_row_text_height">28dp</dimen>
+    <!-- Item Dimens -->
+    <dimen name="row_list">64dp</dimen>
+    <dimen name="row_height">72dp</dimen>
+    <dimen name="row_text_height">32dp</dimen>
+    <dimen name="row_small">56dp</dimen>
+    <dimen name="row_large">72dp</dimen>
+
+    <!-- Login Activity -->
+    <dimen name="profile_img_height">200dp</dimen>
+    <dimen name="profile_img_width">200dp</dimen>
+    <dimen name="profile_img_margin">80dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+
+    <!-- Main -->
+    <dimen name="checkBoxStart">8dp</dimen>
+    <dimen name="checkBoxTop">12dp</dimen>
+
+    <!-- Editor Activity-->
+    <dimen name="item_addBtn">16dp</dimen>
+    <dimen name="item_addBtnTop">4dp</dimen>
+    <dimen name="item_radioBtn">16dp</dimen>
+    <dimen name="item_name_start">72dp</dimen>
+    <dimen name="item_name_end">16dp</dimen>
+    <dimen name="item_close_padding">12dp</dimen>
+    <dimen name="item_close_paddingEnd">16dp</dimen>
+    <dimen name="item_name_padding">16dp</dimen>
+    <dimen name="item_name_margin">0dp</dimen>
+    <dimen name="item_icon_padding">16dp</dimen>
+    <dimen name="item_switch_padding_end">10dp</dimen>
+    <dimen name="item_switch_padding">20dp</dimen>
+    <dimen name="item_duration_time">16dp</dimen>
+    <dimen name="item_rl_row">0dp</dimen>
+
+    <!-- Bottom Sheet -->
+    <dimen name="profile_icon_width">40dp</dimen>
+    <dimen name="profile_icon_height">40dp</dimen>
+    <dimen name="search_bar_margin">8dp</dimen>
+    <dimen name="checked_bckGround_Start">16dp</dimen>
+    <dimen name="checked_icon_top">20dp</dimen>
+    <dimen name="checked_icon_start">24dp</dimen>
+
+    <!-- Time Picker -->
+
+    <dimen name="time_picker_textSize">42sp</dimen>
+    <dimen name="desc_picker_textSize">28sp</dimen>
+
+    <dimen name="button_picker_paddingTop">20dp</dimen>
+    <dimen name="button_picker_paddingBottom">20dp</dimen>
+    <dimen name="button_picker_paddingStart">36dp</dimen>
+    <dimen name="button_picker_paddingEnd">36dp</dimen>
+    <dimen name="button_picker_textSize">28sp</dimen>
+
+</resources>
+

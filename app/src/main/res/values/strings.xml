@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Intervalometer</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!--MainActivity-->
+    <string name="on_title">On</string>
+
+
+    <!--Dialog-->
+    <string name="dialog_title">Title</string>
+
+</resources>

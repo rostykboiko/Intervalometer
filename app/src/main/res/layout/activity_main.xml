@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:elevation="0dp"
+    android:orientation="vertical"
+    app:theme="@style/AppTheme"
+    tools:context="com.example.rosst.intervalometer.main.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/on_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#e0e0e0"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <TextView
+            android:id="@+id/on_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/on_title"
+            android:theme="@style/AppTheme.Text.SwitchTitle"/>
+
+        <Switch
+            android:id="@+id/on_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</RelativeLayout>
