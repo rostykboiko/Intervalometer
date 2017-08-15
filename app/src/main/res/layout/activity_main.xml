@@ -14,9 +14,8 @@
         android:id="@+id/on_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="#e0e0e0"
+        android:background="@color/tabBackground"
         android:paddingTop="12dp"
-        android:paddingBottom="12dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
@@ -24,14 +23,15 @@
             android:id="@+id/on_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/on_title"
+            android:text="@string/on_title_txt"
             android:theme="@style/AppTheme.Text.SwitchTitle"/>
 
         <Switch
             android:id="@+id/on_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:shadowColor="@color/colorPrimary"/>
 
     </RelativeLayout>
 </RelativeLayout>

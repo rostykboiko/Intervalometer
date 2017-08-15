@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity  {
      */
     private void initializeView() {
         final Intent floatingButton = new Intent(MainActivity.this, FloatingViewService.class);
-
-        onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        onSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
+            public void onClick(View view) {
+                if (onSwitch.isChecked()){
                     startService(floatingButton);
+                    finish();
                 } else {
                     stopService(floatingButton);
                 }

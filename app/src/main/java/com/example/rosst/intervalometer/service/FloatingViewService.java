@@ -18,36 +18,14 @@ public class FloatingViewService extends Service {
     private WindowManager mWindowManager;
     private View mFloatingView;
 
-    public FloatingViewService() {
-    }
-
-    public static boolean isViewVisible() {
-        return viewVisible;
-    }
-
-    public static void viewOn() {
-        viewVisible = true;
-    }
-
-    public static void viewOff() {
-        viewVisible = false;
-    }
-
-    private static boolean viewVisible;
+    public FloatingViewService(){}
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //Inflate the floating view layout we created
-        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
-
-        viewOn();
-
+    private void initFloatingView(){
         //Add the view to the window.
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -79,21 +57,6 @@ public class FloatingViewService extends Service {
                 expandedView.setVisibility(View.GONE);
             }
         });
-
-        //Open the application on thi button click
-//        ImageView openButton = (ImageView) mFloatingView.findViewById(R.id.open_button);
-//        openButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //Open the application  click.
-//                Intent intent = new Intent(FloatingViewService.this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//
-//                //close the service and remove view from the view hierarchy
-//                stopSelf();
-//            }
-//        });
 
         //Drag and move floating view using user's touch action.
         mFloatingView.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
@@ -145,6 +108,32 @@ public class FloatingViewService extends Service {
         });
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        //Inflate the floating view layout we created
+        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+
+        viewOn();
+        initFloatingView();
+
+        //Open the application on thi button click
+//        ImageView openButton = (ImageView) mFloatingView.findViewById(R.id.open_button);
+//        openButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //Open the application  click.
+//                Intent intent = new Intent(FloatingViewService.this, MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//
+//                //close the service and remove view from the view hierarchy
+//                stopSelf();
+//            }
+//        });
+    }
+
 
 
     /**
@@ -162,4 +151,18 @@ public class FloatingViewService extends Service {
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
         viewOff();
     }
+
+    public static boolean isViewVisible() {
+        return viewVisible;
+    }
+
+    public static void viewOn() {
+        viewVisible = true;
+    }
+
+    public static void viewOff() {
+        viewVisible = false;
+    }
+
+    private static boolean viewVisible;
 }
