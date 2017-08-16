@@ -26,7 +26,8 @@ public class FloatingViewService extends Service {
     private TextView shutterValue;
     private HorizontalWheelView horizontalWheelView;
 
-    public FloatingViewService(){}
+    public FloatingViewService() {
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,10 +39,10 @@ public class FloatingViewService extends Service {
         super.onCreate();
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
 
-        shutterValue = mFloatingView.findViewById(R.id.shutter_value);
-        horizontalWheelView = mFloatingView.findViewById(R.id.shutter_wheel);
+        shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
+        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
 
-        TextView openButton = mFloatingView.findViewById(R.id.info_tv);
+        TextView openButton = (TextView) mFloatingView.findViewById(R.id.info_tv);
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +62,7 @@ public class FloatingViewService extends Service {
     }
 
 
-    private void initFloatingView(){
+    private void initFloatingView() {
         //Add the view to the window.
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -86,7 +87,7 @@ public class FloatingViewService extends Service {
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
 
         //Set the close button
-        ImageView closeButton = mFloatingView.findViewById(R.id.close_btn);
+        ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_btn);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,8 +164,8 @@ public class FloatingViewService extends Service {
         viewOff();
     }
 
-    private void initSpinnerMenus(){
-        Spinner spinnerShutter = mFloatingView.findViewById(R.id.spinner_shutter_btn);
+    private void initSpinnerMenus() {
+        Spinner spinnerShutter = (Spinner) mFloatingView.findViewById(R.id.spinner_shutter_btn);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapterShutter = ArrayAdapter.createFromResource(this,
                 R.array.shutter_buttons_array, android.R.layout.simple_spinner_item);
@@ -173,19 +174,19 @@ public class FloatingViewService extends Service {
 // Apply the adapter to the spinner
         spinnerShutter.setAdapter(adapterShutter);
 
-        Spinner spinnerDuration = mFloatingView.findViewById(R.id.spinner_duration);
+        Spinner spinnerDuration = (Spinner) mFloatingView.findViewById(R.id.spinner_duration);
         ArrayAdapter<CharSequence> adapterDuration = ArrayAdapter.createFromResource(this,
                 R.array.duration_array, android.R.layout.simple_spinner_item);
         adapterDuration.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDuration.setAdapter(adapterDuration);
 
-        Spinner spinnerIntervals = mFloatingView.findViewById(R.id.spinner_intervals);
+        Spinner spinnerIntervals = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
         ArrayAdapter<CharSequence> adapterIntervals = ArrayAdapter.createFromResource(this,
                 R.array.intervals_array, android.R.layout.simple_spinner_item);
         adapterIntervals.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerIntervals.setAdapter(adapterIntervals);
 
-        Spinner spinnerFrameRate = mFloatingView.findViewById(R.id.spinner_frames);
+        Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_frames);
         ArrayAdapter<CharSequence> adapterFrameRate = ArrayAdapter.createFromResource(this,
                 R.array.frame_rates_array, android.R.layout.simple_spinner_item);
         adapterFrameRate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

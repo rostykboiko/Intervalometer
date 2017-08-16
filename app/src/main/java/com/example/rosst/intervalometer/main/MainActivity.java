@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -19,6 +20,7 @@ import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity  {
     @BindView(R.id.on_switch)
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 if (onSwitch.isChecked()){
                     startService(floatingButton);
+                    Intent camera = new Intent("android.media.action.IMAGE_CAPTURE");
+                    startActivity(camera);
                     finish();
                 } else {
                     stopService(floatingButton);
@@ -79,7 +83,6 @@ public class MainActivity extends AppCompatActivity  {
                 Toast.makeText(this,
                         "Draw over other app permission not available. Closing the application",
                         Toast.LENGTH_SHORT).show();
-
                 finish();
             }
         } else {

@@ -32,18 +32,5 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:shadowColor="@color/colorPrimary"/>
-
     </RelativeLayout>
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="103dp"
-        android:max="10"
-        android:progress="3"
-        android:scrollIndicators="top"
-        android:layout_below="@+id/on_layout"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
