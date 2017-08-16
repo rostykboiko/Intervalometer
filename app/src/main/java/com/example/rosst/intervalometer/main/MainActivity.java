@@ -10,39 +10,29 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.service.FloatingViewService;
+import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity  {
+    @BindView(R.id.on_switch)
+    Switch onSwitch;
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
-    private Switch onSwitch;
-    private RelativeLayout switchLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        onSwitch = (Switch) findViewById(R.id.on_switch);
-        switchLayout = (RelativeLayout) findViewById(R.id.on_layout);
 
-        switchLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onSwitch.isChecked()) {
-                    onSwitch.setChecked(false);
-                }
-                else {
-                    onSwitch.setChecked(true);
-                    finish();
-                }
-            }
-        });
+        ButterKnife.bind(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            //If the draw over permission is not available open the settings screen
-            //to grant the permission.
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
@@ -96,5 +86,4 @@ public class MainActivity extends AppCompatActivity  {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 }
