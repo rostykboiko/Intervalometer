@@ -19,15 +19,19 @@ import com.example.rosst.intervalometer.main.MainActivity;
 import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.Locale;
+import java.util.Timer;
 
 public class FloatingViewService extends Service {
+    private int delay = 1000;
+    private String repeat;
     private WindowManager mWindowManager;
     private View mFloatingView;
     private TextView shutterValue;
     private HorizontalWheelView horizontalWheelView;
+    private Timer mTimer = new Timer();
+    private IntervalometerTask intervalometerTask = new IntervalometerTask();
 
-    public FloatingViewService() {
-    }
+    public FloatingViewService() {}
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,18 +46,7 @@ public class FloatingViewService extends Service {
         shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
         horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
 
-        TextView openButton = (TextView) mFloatingView.findViewById(R.id.info_tv);
-        openButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(FloatingViewService.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-                stopSelf();
-            }
-        });
-
+        initButtons();
         viewOn();
         initFloatingView();
         setupListeners();
@@ -61,6 +54,39 @@ public class FloatingViewService extends Service {
         initSpinnerMenus();
     }
 
+    private void initButtons() {
+        TextView openButton = (TextView) mFloatingView.findViewById(R.id.info_tv);
+        openButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FloatingViewService.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intervalometerTask.cancel();
+
+                startActivity(intent);
+
+                stopSelf();
+            }
+        });
+
+        TextView startButton = (TextView) mFloatingView.findViewById(R.id.start_tv);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int interval = Integer.parseInt(repeat);
+
+                startIntervalometer(delay, interval);
+            }
+        });
+
+        TextView stopButton = (TextView) mFloatingView.findViewById(R.id.stop_tv);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopIntervalometer();
+            }
+        });
+    }
 
     private void initFloatingView() {
         //Add the view to the window.
@@ -73,7 +99,7 @@ public class FloatingViewService extends Service {
 
         //Specify the view position
         //Initially view will be added to bottom-left corner
-        params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+        params.gravity = Gravity.BOTTOM | Gravity.START;
         params.x = 0;
         params.y = 140;
 
@@ -164,6 +190,22 @@ public class FloatingViewService extends Service {
         viewOff();
     }
 
+    private void startIntervalometer(int delay, int repeat) {
+        repeat *= 1000;
+        mFloatingView.findViewById(R.id.controls_container).setVisibility(View.VISIBLE);
+        mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+
+
+        mTimer.schedule(intervalometerTask, delay, repeat);
+    }
+
+    private void stopIntervalometer(){
+        intervalometerTask.cancel();
+        mFloatingView.findViewById(R.id.controls_container).setVisibility(View.GONE);
+        mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
+
+
+    }
     private void initSpinnerMenus() {
         Spinner spinnerShutter = (Spinner) mFloatingView.findViewById(R.id.spinner_shutter_btn);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -207,10 +249,10 @@ public class FloatingViewService extends Service {
     }
 
     private void updateText() {
-        String text = String.format(Locale.US, "%.0f sec", horizontalWheelView.getDegreesAngle());
-        shutterValue.setText(text);
+        String sec = " sec";
+        repeat = String.format(Locale.US, "%.0f", horizontalWheelView.getDegreesAngle());
+        shutterValue.setText(repeat + sec);
     }
-
 
     public static boolean isViewVisible() {
         return viewVisible;
