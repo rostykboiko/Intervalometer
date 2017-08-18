@@ -41,14 +41,10 @@ public class FloatingViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
 
-        shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
-        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
-
+        initFloatingView();
         initButtons();
         viewOn();
-        initFloatingView();
         setupListeners();
         updateUi();
         initSpinnerMenus();
@@ -89,6 +85,11 @@ public class FloatingViewService extends Service {
     }
 
     private void initFloatingView() {
+        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+
+        shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
+        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
+
         //Add the view to the window.
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -98,10 +99,9 @@ public class FloatingViewService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         //Specify the view position
-        //Initially view will be added to bottom-left corner
-        params.gravity = Gravity.BOTTOM | Gravity.START;
+        params.gravity = Gravity.TOP | Gravity.LEFT;        //Initially view will be added to top-left corner
         params.x = 0;
-        params.y = 140;
+        params.y = 100;
 
         //Add the view to the window
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -123,54 +123,53 @@ public class FloatingViewService extends Service {
         });
 
         //Drag and move floating view using user's touch action.
-        mFloatingView.findViewById(R.id.collapse_view)
-                .setOnTouchListener(new View.OnTouchListener() {
-                    private int initialX;
-                    private int initialY;
-                    private float initialTouchX;
-                    private float initialTouchY;
+        mFloatingView.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
 
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
 
-                                //remember the initial position.
-                                initialX = params.x;
-                                initialY = params.y;
+                        //remember the initial position.
+                        initialX = params.x;
+                        initialY = params.y;
 
-                                //get the touch location
-                                initialTouchX = event.getRawX();
-                                initialTouchY = event.getRawY();
-                                return true;
-                            case MotionEvent.ACTION_UP:
-                                int Xdiff = (int) (event.getRawX() - initialTouchX);
-                                int Ydiff = (int) (event.getRawY() - initialTouchY);
+                        //get the touch location
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        int Xdiff = (int) (event.getRawX() - initialTouchX);
+                        int Ydiff = (int) (event.getRawY() - initialTouchY);
 
-                                //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
-                                //So that is click event.
-                                if (Xdiff < 10 && Ydiff < 10) {
-                                    if (isViewCollapsed()) {
-                                        //When user clicks on the image view of the collapsed layout,
-                                        //visibility of the collapsed layout will be changed to "View.GONE"
-                                        //and expanded view will become visible.
-                                        collapsedView.setVisibility(View.GONE);
-                                        expandedView.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                                return true;
-                            case MotionEvent.ACTION_MOVE:
-                                //Calculate the X and Y coordinates of the view.
-                                params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                                params.y = initialY + (int) (event.getRawY() - initialTouchY);
-
-                                //Update the layout with new X & Y coordinate
-                                mWindowManager.updateViewLayout(mFloatingView, params);
-                                return true;
+                        //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
+                        //So that is click event.
+                        if (Xdiff < 10 && Ydiff < 10) {
+                            if (isViewCollapsed()) {
+                                //When user clicks on the image view of the collapsed layout,
+                                //visibility of the collapsed layout will be changed to "View.GONE"
+                                //and expanded view will become visible.
+                                collapsedView.setVisibility(View.GONE);
+                                expandedView.setVisibility(View.VISIBLE);
+                            }
                         }
-                        return false;
-                    }
-                });
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        //Calculate the X and Y coordinates of the view.
+                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+
+                        //Update the layout with new X & Y coordinate
+                        mWindowManager.updateViewLayout(mFloatingView, params);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
