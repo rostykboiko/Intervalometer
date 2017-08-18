@@ -1,6 +1,7 @@
 package com.example.rosst.intervalometer.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -18,20 +19,24 @@ import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.main.MainActivity;
 import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
-import java.util.Locale;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
-public class FloatingViewService extends Service {
+public class FloatingViewService extends Service{
     private int delay = 1000;
-    private String repeat;
     private WindowManager mWindowManager;
     private View mFloatingView;
     private TextView shutterValue;
     private HorizontalWheelView horizontalWheelView;
     private Timer mTimer = new Timer();
+    private TextView duration;
     private IntervalometerTask intervalometerTask = new IntervalometerTask();
 
-    public FloatingViewService() {}
+
+    public FloatingViewService() {
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,8 +46,12 @@ public class FloatingViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
         initFloatingView();
+
+        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
+        duration = (TextView) mFloatingView.findViewById(R.id.duration_counter_tv);
+
+        getIntervalValue();
         initButtons();
         viewOn();
         setupListeners();
@@ -69,9 +78,7 @@ public class FloatingViewService extends Service {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int interval = Integer.parseInt(repeat);
-
-                startIntervalometer(delay, interval);
+                startIntervalometer(delay, (int) (getIntervalValue() * 1000));
             }
         });
 
@@ -85,10 +92,9 @@ public class FloatingViewService extends Service {
     }
 
     private void initFloatingView() {
-        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+        mFloatingView = LayoutInflater.from(FloatingViewService.this).inflate(R.layout.layout_floating_widget, null);
 
         shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
-        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
 
         //Add the view to the window.
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
@@ -172,11 +178,20 @@ public class FloatingViewService extends Service {
         });
     }
 
-    /**
-     * Detect if the floating view is collapsed or expanded.
-     *
-     * @return true if the floating view is collapsed.
-     */
+    private double getIntervalValue() {
+        double mAngle;
+        int angle = (int) horizontalWheelView.getDegreesAngle();
+
+        if (angle == 0) {
+            mAngle = 0.250; // 1/4
+        } else if (angle == 1.0) {
+            mAngle = 0.5; // 1/2
+        } else {
+            mAngle = (angle - 1);
+        }
+        return mAngle;
+    }
+
     private boolean isViewCollapsed() {
         return mFloatingView == null || mFloatingView.findViewById(R.id.collapse_view)
                 .getVisibility() == View.VISIBLE;
@@ -189,22 +204,19 @@ public class FloatingViewService extends Service {
         viewOff();
     }
 
-    private void startIntervalometer(int delay, int repeat) {
-        repeat *= 1000;
+    private void startIntervalometer(int delay, int intervalValue) {
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.VISIBLE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
-
-
-        mTimer.schedule(intervalometerTask, delay, repeat);
+        mTimer.schedule(intervalometerTask, delay, intervalValue);
     }
 
-    private void stopIntervalometer(){
+    private void stopIntervalometer() {
         intervalometerTask.cancel();
+
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.GONE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
-
-
     }
+
     private void initSpinnerMenus() {
         Spinner spinnerShutter = (Spinner) mFloatingView.findViewById(R.id.spinner_shutter_btn);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -249,8 +261,9 @@ public class FloatingViewService extends Service {
 
     private void updateText() {
         String sec = " sec";
-        repeat = String.format(Locale.US, "%.0f", horizontalWheelView.getDegreesAngle());
-        shutterValue.setText(repeat + sec);
+        if (getIntervalValue() < 1)
+            shutterValue.setText(getIntervalValue() + sec);
+        else shutterValue.setText((int) getIntervalValue() + sec);
     }
 
     public static boolean isViewVisible() {

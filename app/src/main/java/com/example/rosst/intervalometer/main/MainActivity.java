@@ -4,32 +4,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.service.FloatingViewService;
-import com.example.rosst.intervalometer.service.IntervalometerTask;
-
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
+
+    public static Handler UIHandler;
+
+    static
+    {
+        UIHandler = new Handler(Looper.getMainLooper());
+    }
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+    }
 
     @BindView(R.id.on_switch)
     Switch onSwitch;
