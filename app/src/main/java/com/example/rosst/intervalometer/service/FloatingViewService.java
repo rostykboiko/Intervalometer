@@ -1,7 +1,6 @@
 package com.example.rosst.intervalometer.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -20,9 +19,6 @@ import com.example.rosst.intervalometer.main.MainActivity;
 import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class FloatingViewService extends Service{
     private int delay = 1000;
