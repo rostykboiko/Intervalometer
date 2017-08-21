@@ -208,6 +208,7 @@ public class FloatingViewService extends Service{
 
     private void stopIntervalometer() {
         intervalometerTask.cancel();
+        intervalometerTask = new IntervalometerTask();
 
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.GONE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
