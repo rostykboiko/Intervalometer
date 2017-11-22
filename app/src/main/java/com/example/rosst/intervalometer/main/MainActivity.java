@@ -22,10 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static Handler UIHandler;
 
-    static
-    {
-        UIHandler = new Handler(Looper.getMainLooper());
-    }
+    static {UIHandler = new Handler(Looper.getMainLooper());}
+
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
     }

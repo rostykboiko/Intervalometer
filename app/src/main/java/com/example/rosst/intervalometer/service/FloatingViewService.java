@@ -92,7 +92,6 @@ public class FloatingViewService extends Service{
 
         shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
 
-        //Add the view to the window.
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -100,21 +99,16 @@ public class FloatingViewService extends Service{
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        //Specify the view position
         params.gravity = Gravity.TOP | Gravity.LEFT;        //Initially view will be added to top-left corner
         params.x = 0;
         params.y = 100;
 
-        //Add the view to the window
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingView, params);
 
-        //The root element of the collapsed view layout
         final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
-        //The root element of the expanded view layout
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
 
-        //Set the close button
         ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_btn);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,8 +118,7 @@ public class FloatingViewService extends Service{
             }
         });
 
-        //Drag and move floating view using user's touch action.
-        mFloatingView.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
+        mFloatingView.findViewById(R.id.collapse_view).setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
             private int initialY;
             private float initialTouchX;
@@ -136,11 +129,9 @@ public class FloatingViewService extends Service{
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
 
-                        //remember the initial position.
                         initialX = params.x;
                         initialY = params.y;
 
-                        //get the touch location
                         initialTouchX = event.getRawX();
                         initialTouchY = event.getRawY();
                         return true;
@@ -148,24 +139,17 @@ public class FloatingViewService extends Service{
                         int Xdiff = (int) (event.getRawX() - initialTouchX);
                         int Ydiff = (int) (event.getRawY() - initialTouchY);
 
-                        //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
-                        //So that is click event.
                         if (Xdiff < 10 && Ydiff < 10) {
                             if (isViewCollapsed()) {
-                                //When user clicks on the image view of the collapsed layout,
-                                //visibility of the collapsed layout will be changed to "View.GONE"
-                                //and expanded view will become visible.
                                 collapsedView.setVisibility(View.GONE);
                                 expandedView.setVisibility(View.VISIBLE);
                             }
                         }
                         return true;
                     case MotionEvent.ACTION_MOVE:
-                        //Calculate the X and Y coordinates of the view.
                         params.x = initialX + (int) (event.getRawX() - initialTouchX);
                         params.y = initialY + (int) (event.getRawY() - initialTouchY);
 
-                        //Update the layout with new X & Y coordinate
                         mWindowManager.updateViewLayout(mFloatingView, params);
                         return true;
                 }
@@ -215,30 +199,13 @@ public class FloatingViewService extends Service{
     }
 
     private void initSpinnerMenus() {
-        Spinner spinnerShutter = (Spinner) mFloatingView.findViewById(R.id.spinner_shutter_btn);
-// Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapterShutter = ArrayAdapter.createFromResource(this,
                 R.array.shutter_buttons_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
         adapterShutter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinnerShutter.setAdapter(adapterShutter);
 
-        Spinner spinnerDuration = (Spinner) mFloatingView.findViewById(R.id.spinner_duration);
-        ArrayAdapter<CharSequence> adapterDuration = ArrayAdapter.createFromResource(this,
-                R.array.duration_array, android.R.layout.simple_spinner_item);
-        adapterDuration.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDuration.setAdapter(adapterDuration);
-
-        Spinner spinnerIntervals = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
-        ArrayAdapter<CharSequence> adapterIntervals = ArrayAdapter.createFromResource(this,
-                R.array.intervals_array, android.R.layout.simple_spinner_item);
-        adapterIntervals.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerIntervals.setAdapter(adapterIntervals);
-
-        Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_frames);
+        Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
         ArrayAdapter<CharSequence> adapterFrameRate = ArrayAdapter.createFromResource(this,
-                R.array.frame_rates_array, android.R.layout.simple_spinner_item);
+                R.array.intervals_array, android.R.layout.simple_spinner_item);
         adapterFrameRate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrameRate.setAdapter(adapterFrameRate);
     }
