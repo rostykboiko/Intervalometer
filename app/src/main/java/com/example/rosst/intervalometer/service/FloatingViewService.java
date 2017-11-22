@@ -3,10 +3,13 @@ package com.example.rosst.intervalometer.service;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.GradientDrawable;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -64,9 +67,9 @@ public class FloatingViewService extends Service{
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intervalometerTask.cancel();
 
-                startActivity(intent);
-
                 stopSelf();
+
+                startActivity(intent);
             }
         });
 
@@ -99,9 +102,9 @@ public class FloatingViewService extends Service{
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.TOP | Gravity.LEFT;        //Initially view will be added to top-left corner
+        params.gravity = Gravity.BOTTOM | Gravity.LEFT;        //Initially view will be added to top-left corner
         params.x = 0;
-        params.y = 100;
+        params.y = 140;
 
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingView, params);
@@ -148,7 +151,9 @@ public class FloatingViewService extends Service{
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        params.y = initialY - (int) (event.getRawY() - initialTouchY);
+
+                        closeFloatingView(params);
 
                         mWindowManager.updateViewLayout(mFloatingView, params);
                         return true;
@@ -157,6 +162,18 @@ public class FloatingViewService extends Service{
             }
         });
     }
+
+    private void closeFloatingView(WindowManager.LayoutParams params){
+        if ((params.x >= 500 && params.x <= 615) &&(params.y >= 170 && params.y <= 230)){
+            // System.out.print("\nTrashCan position: x - " + params.x + "y - " +params.y);
+            System.out.print("\nTrashCan position: true");
+
+            stopSelf();
+        } else {
+            System.out.print("\nTrashCan position: false");
+        }
+    }
+
 
     private double getIntervalValue() {
         double mAngle;

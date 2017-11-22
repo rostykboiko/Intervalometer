@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             initializeView();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (FloatingViewService.isViewVisible()) {
             onSwitch.setChecked(true);
         } else {

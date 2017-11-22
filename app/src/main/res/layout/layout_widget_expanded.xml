@@ -21,22 +21,14 @@
             android:text="@string/dialog_title"
             android:theme="@style/AppTheme.Text.Title" />
 
-        <RelativeLayout
-            android:id="@+id/button_holder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <ImageView
                 android:id="@+id/close_btn"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:layout_margin="16dp"
+                android:padding="8dp"
                 android:src="@drawable/ic_android_black_24dp" />
-        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
