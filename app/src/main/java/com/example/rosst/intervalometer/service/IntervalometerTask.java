@@ -8,31 +8,53 @@ import com.example.rosst.intervalometer.main.MainActivity;
 import java.util.TimerTask;
 
 public class IntervalometerTask extends TimerTask {
-    private String framesCounter;
-    int i = 0;
+    private int currentFrame = 1;
+    private int duration = 0;
+    private int numOfFrames;
+
+    private Callback callback;
+
+    void registerCallBack(Callback callback) {
+        this.callback = callback;
+    }
 
     @Override
     public void run() {
-        framesCounter = "00:00:00";
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (i <120){
-                    Instrumentation inst = new Instrumentation();
-                    inst.sendKeyDownUpSync(KeyEvent.KEYCODE_VOLUME_DOWN);
-                    Thread.sleep(200);
-                    i++;
+                    if (currentFrame < numOfFrames) {
+                        Instrumentation inst = new Instrumentation();
+                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_VOLUME_DOWN);
+                        Thread.sleep(200);
+                        currentFrame++;
                     }
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                try {
+                    Thread.sleep(1000);
+                    duration++;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }).start();
-
         MainActivity.runOnUI(new Runnable() {
             public void run() {
-
-                System.out.println("Hi, again!");
+                if (callback != null)
+                    callback.callBackFrames(currentFrame, numOfFrames);
             }
         });
+    }
+
+    void setNumOfFrames(int numOfFrames) {
+        this.numOfFrames = numOfFrames;
+    }
+
+    interface Callback {
+        void callBackFrames(int currentNum, int numOfFrames);
+        void callBackDuration (int duration);
     }
 }

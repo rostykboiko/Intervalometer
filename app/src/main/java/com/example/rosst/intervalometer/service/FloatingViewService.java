@@ -3,15 +3,13 @@ package com.example.rosst.intervalometer.service;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.GradientDrawable;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -23,14 +21,16 @@ import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.Timer;
 
-public class FloatingViewService extends Service{
+public class FloatingViewService extends Service implements IntervalometerTask.Callback{
     private int delay = 1000;
     private WindowManager mWindowManager;
     private View mFloatingView;
     private TextView shutterValue;
     private HorizontalWheelView horizontalWheelView;
     private Timer mTimer = new Timer();
-    private TextView duration;
+    private int numOfFrames;
+    private TextView durationTV;
+    private TextView framesCounterTV;
     private IntervalometerTask intervalometerTask = new IntervalometerTask();
 
 
@@ -48,8 +48,10 @@ public class FloatingViewService extends Service{
         initFloatingView();
 
         horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
-        duration = (TextView) mFloatingView.findViewById(R.id.duration_counter_tv);
+        durationTV = (TextView) mFloatingView.findViewById(R.id.duration_counter_tv);
+        framesCounterTV = (TextView) mFloatingView.findViewById(R.id.frames_counter_tv);
 
+        intervalometerTask.registerCallBack(this);
         getIntervalValue();
         initButtons();
         viewOn();
@@ -202,14 +204,18 @@ public class FloatingViewService extends Service{
     }
 
     private void startIntervalometer(int delay, int intervalValue) {
+        intervalometerTask = new IntervalometerTask();
+        intervalometerTask.registerCallBack(this);
+        framesCounterTV.setText(0 + "/" + numOfFrames);
+
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.VISIBLE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+        intervalometerTask.setNumOfFrames(numOfFrames);
         mTimer.schedule(intervalometerTask, delay, intervalValue);
     }
 
     private void stopIntervalometer() {
         intervalometerTask.cancel();
-        intervalometerTask = new IntervalometerTask();
 
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.GONE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
@@ -225,6 +231,19 @@ public class FloatingViewService extends Service{
                 R.array.intervals_array, android.R.layout.simple_spinner_item);
         adapterFrameRate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrameRate.setAdapter(adapterFrameRate);
+
+        spinnerFrameRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent,
+                                       View itemSelected, int selectedItemPosition, long selectedId) {
+                String[] option = getResources().getStringArray(R.array.intervals_array);
+                numOfFrames = Integer.parseInt(option[selectedItemPosition]);
+                framesCounterTV.setText(0 + "/" + numOfFrames);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        adapterFrameRate.notifyDataSetChanged();
     }
 
     private void setupListeners() {
@@ -260,4 +279,14 @@ public class FloatingViewService extends Service{
     }
 
     private static boolean viewVisible;
+
+    @Override
+    public void callBackFrames(int currentNum, int numOfFrames) {
+        framesCounterTV.setText(currentNum + "/" + numOfFrames);
+    }
+
+    @Override
+    public void callBackDuration(int duration) {
+        durationTV.setText("00:00:00");
+    }
 }
