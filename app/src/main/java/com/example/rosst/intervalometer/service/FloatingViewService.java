@@ -1,5 +1,6 @@
 package com.example.rosst.intervalometer.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -95,8 +96,10 @@ public class FloatingViewService extends Service
         });
     }
 
+    @SuppressLint("InflateParams")
     private void initFloatingView() {
-        mFloatingView = LayoutInflater.from(FloatingViewService.this).inflate(R.layout.layout_floating_widget, null);
+        mFloatingView = LayoutInflater.from(FloatingViewService.this)
+                .inflate(R.layout.layout_floating_widget, null);
 
         shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
 
@@ -107,11 +110,12 @@ public class FloatingViewService extends Service
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.BOTTOM | Gravity.LEFT;        //Initially view will be added to top-left corner
+        params.gravity = Gravity.BOTTOM | Gravity.START;        //Initially view will be added to top-left corner
         params.x = 0;
         params.y = 140;
 
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        assert mWindowManager != null;
         mWindowManager.addView(mFloatingView, params);
 
         final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
@@ -132,6 +136,7 @@ public class FloatingViewService extends Service
             private float initialTouchX;
             private float initialTouchY;
 
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -206,6 +211,7 @@ public class FloatingViewService extends Service
         viewOff();
     }
 
+    @SuppressLint("SetTextI18n")
     private void startIntervalometer(int delay, int intervalValue) {
         intervalometerTask = new IntervalometerTask();
         intervalometerTask.registerCallBack(this);
@@ -213,7 +219,7 @@ public class FloatingViewService extends Service
 
         durationTask = new DurationTask();
         durationTask.registerCallBack(this);
-        durationTV.setText("0:00:00");
+        durationTV.setText(R.string.TimerDummy);
 
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.VISIBLE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
@@ -243,6 +249,7 @@ public class FloatingViewService extends Service
         spinnerFrameRate.setAdapter(adapterFrameRate);
 
         spinnerFrameRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
                 String[] option = getResources().getStringArray(R.array.intervals_array);
@@ -270,6 +277,7 @@ public class FloatingViewService extends Service
         updateText();
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateText() {
         String sec = " sec";
         if (getIntervalValue() < 1)
@@ -291,6 +299,7 @@ public class FloatingViewService extends Service
 
     private static boolean viewVisible;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void callBackFrames(int currentNum, int numOfFrames) {
         framesCounterTV.setText(currentNum + "/" + numOfFrames);

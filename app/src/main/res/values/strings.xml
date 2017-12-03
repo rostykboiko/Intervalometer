@@ -62,7 +62,7 @@
     <string name="result_label">Quick Settings Result Activity</string>
     <string name="result_output" formatted="false">The %s tile is %s.</string>
     <string name="result_return">Return to home</string>
-
+    <string name="TimerDummy">0:00:00</string>
 
 
 </resources>
