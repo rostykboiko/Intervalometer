@@ -9,7 +9,6 @@ import java.util.TimerTask;
 
 public class IntervalometerTask extends TimerTask {
     private int currentFrame = 1;
-    private int duration = 0;
     private int numOfFrames;
 
     private Callback callback;
@@ -33,18 +32,13 @@ public class IntervalometerTask extends TimerTask {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-                try {
-                    Thread.sleep(1000);
-                    duration++;
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
             }
         }).start();
         MainActivity.runOnUI(new Runnable() {
             public void run() {
-                if (callback != null)
+                if (callback != null) {
                     callback.callBackFrames(currentFrame, numOfFrames);
+                }
             }
         });
     }
@@ -55,6 +49,5 @@ public class IntervalometerTask extends TimerTask {
 
     interface Callback {
         void callBackFrames(int currentNum, int numOfFrames);
-        void callBackDuration (int duration);
     }
 }

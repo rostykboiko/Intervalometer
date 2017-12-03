@@ -21,7 +21,8 @@ import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.Timer;
 
-public class FloatingViewService extends Service implements IntervalometerTask.Callback{
+public class FloatingViewService extends Service
+        implements IntervalometerTask.Callback, DurationTask.Callback{
     private int delay = 1000;
     private WindowManager mWindowManager;
     private View mFloatingView;
@@ -32,6 +33,7 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
     private TextView durationTV;
     private TextView framesCounterTV;
     private IntervalometerTask intervalometerTask = new IntervalometerTask();
+    private DurationTask durationTask = new DurationTask();
 
 
     public FloatingViewService() {
@@ -52,6 +54,7 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
         framesCounterTV = (TextView) mFloatingView.findViewById(R.id.frames_counter_tv);
 
         intervalometerTask.registerCallBack(this);
+        durationTask.registerCallBack(this);
         getIntervalValue();
         initButtons();
         viewOn();
@@ -165,8 +168,8 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
         });
     }
 
-    private void closeFloatingView(WindowManager.LayoutParams params){
-        if ((params.x >= 500 && params.x <= 615) &&(params.y >= 170 && params.y <= 230)){
+    private void closeFloatingView(WindowManager.LayoutParams params) {
+        if ((params.x >= 500 && params.x <= 615) && (params.y >= 170 && params.y <= 230)) {
             // System.out.print("\nTrashCan position: x - " + params.x + "y - " +params.y);
             System.out.print("\nTrashCan position: true");
 
@@ -208,14 +211,21 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
         intervalometerTask.registerCallBack(this);
         framesCounterTV.setText(0 + "/" + numOfFrames);
 
+        durationTask = new DurationTask();
+        durationTask.registerCallBack(this);
+        durationTV.setText("0:00:00");
+
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.VISIBLE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
         intervalometerTask.setNumOfFrames(numOfFrames);
+
+        mTimer.schedule(durationTask, 0, 1000);
         mTimer.schedule(intervalometerTask, delay, intervalValue);
     }
 
     private void stopIntervalometer() {
         intervalometerTask.cancel();
+        durationTask.cancel();
 
         mFloatingView.findViewById(R.id.controls_container).setVisibility(View.GONE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
@@ -239,6 +249,7 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
                 numOfFrames = Integer.parseInt(option[selectedItemPosition]);
                 framesCounterTV.setText(0 + "/" + numOfFrames);
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -287,6 +298,19 @@ public class FloatingViewService extends Service implements IntervalometerTask.C
 
     @Override
     public void callBackDuration(int duration) {
-        durationTV.setText("00:00:00");
+        int sec, min, h;
+        String durationStr;
+
+        h = duration / 3600;
+        min = duration / 60 % 60;
+        sec = duration % 60;
+
+        durationStr = h + ":";
+        if (min < 10) durationStr += "0" + min;
+        else durationStr += min + ":";
+        if (sec < 10) durationStr += ":0" + sec;
+        else durationStr += sec;
+
+        durationTV.setText(durationStr);
     }
 }
