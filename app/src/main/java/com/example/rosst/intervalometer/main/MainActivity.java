@@ -9,10 +9,16 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.example.rosst.intervalometer.R;
-import com.example.rosst.intervalometer.service.FloatingViewService;
+import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
+import com.example.rosst.intervalometer.floatingButtonService.SpinnerAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

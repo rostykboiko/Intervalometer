@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rosst.intervalometer.R;
-import com.example.rosst.intervalometer.service.FloatingViewService;
+import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
 
 
 import butterknife.BindView;

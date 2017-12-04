@@ -1,4 +1,4 @@
-package com.example.rosst.intervalometer.service;
+package com.example.rosst.intervalometer.floatingButtonService;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -22,10 +22,13 @@ import com.example.rosst.intervalometer.dialog.DurationDialogActivity;
 import com.example.rosst.intervalometer.utilities.Callback;
 import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 
 public class FloatingViewService extends Service
-        implements Callback{
+        implements Callback {
     private int delay = 1000;
     private int numOfFrames;
 
@@ -36,13 +39,16 @@ public class FloatingViewService extends Service
     private TextView shutterValue;
     private TextView durationTV;
     private TextView framesCounterTV;
-
+    private MainActivity mainActivity = new MainActivity();
+    private List<String> spinnerOptions = new ArrayList<>();
     private Timer mTimer = new Timer();
     private DurationTask durationTask = new DurationTask();
     private IntervalometerTask intervalometerTask = new IntervalometerTask();
 
     @Override
-    public IBinder onBind(Intent intent) {return null;}
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
     @Override
     public void onCreate() {
@@ -64,11 +70,16 @@ public class FloatingViewService extends Service
         getIntervalValue();
 
     }
-    public int onStartCommand(Intent intent, int flags, int startId){
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getExtras() != null) {
             framesCounterTV.setText(getString(R.string.frame_counter_tv) + intent.getStringExtra("Custom Frames"));
+            spinnerOptions.set(4, intent.getStringExtra("Custom Frames"));
 
-            System.out.println("Floating intent " + intent.getStringExtra("Custom Frames"));
+            numOfFrames = Integer.parseInt(intent.getStringExtra("Custom Frames"));
+
+            System.out.println("Floating intent " + intent.getStringExtra("Custom Frames") + "||" +
+                    framesCounterTV);
         }
 
         return Service.START_STICKY;
@@ -189,11 +200,11 @@ public class FloatingViewService extends Service
         });
     }
 
-    private void closeView(){
+    private void closeView() {
         stopService(new Intent(getApplicationContext(), FloatingViewService.class));
     }
 
-    private void collapseView(){
+    private void collapseView() {
         mFloatingView.findViewById(R.id.collapse_view).setVisibility(View.VISIBLE);
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
     }
@@ -201,10 +212,10 @@ public class FloatingViewService extends Service
     private void closeFloatingView(WindowManager.LayoutParams params) {
         if ((params.x >= 500 && params.x <= 615) && (params.y >= 170 && params.y <= 230)) {
             // System.out.print("\nTrashCan position: x - " + params.x + "y - " +params.y);
-          //  System.out.print("\nTrashCan position: true");
+            //  System.out.print("\nTrashCan position: true");
             stopSelf();
         } else {
-          //  System.out.print("\nTrashCan position: false");
+            //  System.out.print("\nTrashCan position: false");
         }
     }
 
@@ -261,35 +272,31 @@ public class FloatingViewService extends Service
     }
 
     private void initSpinnerMenus() {
-        ArrayAdapter<CharSequence> adapterShutter = ArrayAdapter.createFromResource(this,
-                R.array.shutter_buttons_array, android.R.layout.simple_spinner_item);
-        adapterShutter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        String[] myResArray = getResources().getStringArray(R.array.intervals_array);
+        spinnerOptions = Arrays.asList(myResArray);
 
         Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
-        ArrayAdapter<CharSequence> adapterFrameRate = ArrayAdapter.createFromResource(this,
-                R.array.intervals_array, android.R.layout.simple_spinner_item);
-        adapterFrameRate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFrameRate.setAdapter(adapterFrameRate);
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerOptions, FloatingViewService.this);
+        spinnerFrameRate.setAdapter(spinnerAdapter);
+
         spinnerFrameRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @SuppressLint("SetTextI18n")
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
-                String[] option = getResources().getStringArray(R.array.intervals_array);
                 if (selectedItemPosition == 4) {
-                    startActivity(new Intent(FloatingViewService.this,
-                            DurationDialogActivity.class));
-                    option[4] = "";
+                    startActivity(new Intent(FloatingViewService.this, DurationDialogActivity.class));
+                    framesCounterTV.getText().toString();
                     collapseView();
                 } else {
-                    numOfFrames = Integer.parseInt(option[selectedItemPosition]);
+                    numOfFrames = Integer.parseInt(spinnerOptions.get(selectedItemPosition));
                     framesCounterTV.setText(0 + "/" + numOfFrames);
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        adapterFrameRate.notifyDataSetChanged();
     }
 
     private void setupListeners() {

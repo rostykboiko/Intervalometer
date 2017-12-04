@@ -1,4 +1,4 @@
-package com.example.rosst.intervalometer.service;
+package com.example.rosst.intervalometer.floatingButtonService;
 
 import android.app.Instrumentation;
 import android.view.KeyEvent;

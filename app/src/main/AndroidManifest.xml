@@ -36,11 +36,11 @@
         </activity>
 
         <service
-            android:name=".service.FloatingViewService"
+            android:name=".floatingButtonService.FloatingViewService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.QSDialog"
+            android:name=".floatingButtonService.QSDialog"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:enabled="true"

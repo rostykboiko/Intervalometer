@@ -1,4 +1,4 @@
-package com.example.rosst.intervalometer.service;
+package com.example.rosst.intervalometer.floatingButtonService;
 
 import com.example.rosst.intervalometer.main.MainActivity;
 import com.example.rosst.intervalometer.utilities.Callback;
