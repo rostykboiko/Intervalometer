@@ -39,8 +39,8 @@ public class FloatingViewService extends Service
     private TextView shutterValue;
     private TextView durationTV;
     private TextView framesCounterTV;
-    private MainActivity mainActivity = new MainActivity();
     private List<String> spinnerOptions = new ArrayList<>();
+    private SpinnerAdapter spinnerAdapter;
     private Timer mTimer = new Timer();
     private DurationTask durationTask = new DurationTask();
     private IntervalometerTask intervalometerTask = new IntervalometerTask();
@@ -68,20 +68,20 @@ public class FloatingViewService extends Service
         setupListeners();
         initSpinnerMenus();
         getIntervalValue();
-
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getExtras() != null) {
-            framesCounterTV.setText(getString(R.string.frame_counter_tv) + intent.getStringExtra("Custom Frames"));
+            String frameString = getString(R.string.frame_counter_tv) + intent.getStringExtra("Custom Frames");
+            framesCounterTV.setText(frameString);
             spinnerOptions.set(4, intent.getStringExtra("Custom Frames"));
-
             numOfFrames = Integer.parseInt(intent.getStringExtra("Custom Frames"));
+
+            spinnerAdapter.notifyDataSetChanged();
 
             System.out.println("Floating intent " + intent.getStringExtra("Custom Frames") + "||" +
                     framesCounterTV);
         }
-
         return Service.START_STICKY;
     }
 
@@ -277,7 +277,7 @@ public class FloatingViewService extends Service
         spinnerOptions = Arrays.asList(myResArray);
 
         Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(spinnerOptions, FloatingViewService.this);
+        spinnerAdapter = new SpinnerAdapter(spinnerOptions, FloatingViewService.this);
         spinnerFrameRate.setAdapter(spinnerAdapter);
 
         spinnerFrameRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -286,7 +286,7 @@ public class FloatingViewService extends Service
                                        View itemSelected, int selectedItemPosition, long selectedId) {
                 if (selectedItemPosition == 4) {
                     startActivity(new Intent(FloatingViewService.this, DurationDialogActivity.class));
-                    framesCounterTV.getText().toString();
+                    framesCounterTV.getText();
                     collapseView();
                 } else {
                     numOfFrames = Integer.parseInt(spinnerOptions.get(selectedItemPosition));
