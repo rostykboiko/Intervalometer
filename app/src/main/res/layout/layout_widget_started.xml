@@ -3,8 +3,8 @@
     android:id="@+id/controls_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@drawable/dialog_bg"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <RelativeLayout
@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="@string/dialog_title"
             android:theme="@style/AppTheme.Text.Title" />
@@ -40,55 +40,55 @@
             android:id="@+id/frames_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
             android:padding="8dp"
-            android:text="Frames" />
+            android:text="Frames"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/duration_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/frames_title_tv"
+            android:padding="8dp"
             android:text="Duration"
             android:textColor="@color/colorText"
-            android:textSize="18sp"
-            android:padding="8dp"
-            android:layout_below="@+id/frames_title_tv"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/frames_counter_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="8dp"
             android:text="0/120"
-            android:textStyle="bold"
             android:textColor="@color/colorText"
             android:textSize="18sp"
-            android:padding="8dp"
-            android:layout_alignParentEnd="true"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/duration_counter_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/frames_counter_tv"
+            android:padding="8dp"
             android:text="00:00:00"
-            android:textStyle="bold"
             android:textColor="@color/colorText"
             android:textSize="18sp"
-            android:padding="8dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/frames_counter_tv"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/stop_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="STOP"
             android:layout_below="@id/duration_counter_tv"
+            android:layout_centerHorizontal="true"
+            android:padding="8dp"
+            android:text="STOP"
             android:textColor="@color/colorTextRed"
             android:textSize="18sp"
-            android:padding="8dp"
-            android:textStyle="bold"
-            android:layout_centerHorizontal="true" />
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

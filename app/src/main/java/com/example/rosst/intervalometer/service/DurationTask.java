@@ -1,6 +1,7 @@
 package com.example.rosst.intervalometer.service;
 
 import com.example.rosst.intervalometer.main.MainActivity;
+import com.example.rosst.intervalometer.utilities.Callback;
 
 import java.util.TimerTask;
 
@@ -12,6 +13,7 @@ public class DurationTask extends TimerTask {
     void registerCallBack(Callback callback) {
         this.callback = callback;
     }
+
     @Override
     public void run() {
         try {
@@ -27,9 +29,5 @@ public class DurationTask extends TimerTask {
                 }
             }
         });
-    }
-
-    interface Callback {
-        void callBackDuration(int duration);
     }
 }

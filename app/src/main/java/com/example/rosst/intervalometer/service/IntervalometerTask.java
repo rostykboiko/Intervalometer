@@ -4,6 +4,7 @@ import android.app.Instrumentation;
 import android.view.KeyEvent;
 
 import com.example.rosst.intervalometer.main.MainActivity;
+import com.example.rosst.intervalometer.utilities.Callback;
 
 import java.util.TimerTask;
 
@@ -45,9 +46,5 @@ public class IntervalometerTask extends TimerTask {
 
     void setNumOfFrames(int numOfFrames) {
         this.numOfFrames = numOfFrames;
-    }
-
-    interface Callback {
-        void callBackFrames(int currentNum, int numOfFrames);
     }
 }

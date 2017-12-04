@@ -8,5 +8,26 @@
     <color name="colorSubTitle">#727272</color>
     <color name="tabBackground">#E0E0E0</color>
 
+    <color name="colorAccentSecond">#2196F3</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#727272</color>
+    <color name="colorDivider">#DCDCDC</color>
+    <color name="colorActiveSwitch">#2196f3</color>
+
     <color name="black_overlay">#66000000</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#727272</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="titan">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="base">#DDDDDD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="whiteBasic">#FFFFFF</color>
+
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
 </resources>

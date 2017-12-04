@@ -18,32 +18,31 @@ import android.widget.TextView;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.main.MainActivity;
+import com.example.rosst.intervalometer.dialog.DurationDialogActivity;
+import com.example.rosst.intervalometer.utilities.Callback;
 import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.Timer;
 
 public class FloatingViewService extends Service
-        implements IntervalometerTask.Callback, DurationTask.Callback{
+        implements Callback{
     private int delay = 1000;
-    private WindowManager mWindowManager;
-    private View mFloatingView;
-    private TextView shutterValue;
-    private HorizontalWheelView horizontalWheelView;
-    private Timer mTimer = new Timer();
     private int numOfFrames;
+
+    private View mFloatingView;
+    private WindowManager mWindowManager;
+    private HorizontalWheelView horizontalWheelView;
+
+    private TextView shutterValue;
     private TextView durationTV;
     private TextView framesCounterTV;
-    private IntervalometerTask intervalometerTask = new IntervalometerTask();
+
+    private Timer mTimer = new Timer();
     private DurationTask durationTask = new DurationTask();
-
-
-    public FloatingViewService() {
-    }
+    private IntervalometerTask intervalometerTask = new IntervalometerTask();
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    public IBinder onBind(Intent intent) {return null;}
 
     @Override
     public void onCreate() {
@@ -54,14 +53,25 @@ public class FloatingViewService extends Service
         durationTV = (TextView) mFloatingView.findViewById(R.id.duration_counter_tv);
         framesCounterTV = (TextView) mFloatingView.findViewById(R.id.frames_counter_tv);
 
-        intervalometerTask.registerCallBack(this);
         durationTask.registerCallBack(this);
-        getIntervalValue();
-        initButtons();
+        intervalometerTask.registerCallBack(this);
+
         viewOn();
-        setupListeners();
         updateUi();
+        initButtons();
+        setupListeners();
         initSpinnerMenus();
+        getIntervalValue();
+
+    }
+    public int onStartCommand(Intent intent, int flags, int startId){
+        if (intent != null && intent.getExtras() != null) {
+            framesCounterTV.setText(getString(R.string.frame_counter_tv) + intent.getStringExtra("Custom Frames"));
+
+            System.out.println("Floating intent " + intent.getStringExtra("Custom Frames"));
+        }
+
+        return Service.START_STICKY;
     }
 
     private void initButtons() {
@@ -74,7 +84,6 @@ public class FloatingViewService extends Service
                 intervalometerTask.cancel();
 
                 stopSelf();
-
                 startActivity(intent);
             }
         });
@@ -125,8 +134,15 @@ public class FloatingViewService extends Service
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                collapsedView.setVisibility(View.VISIBLE);
-                expandedView.setVisibility(View.GONE);
+                closeView();
+            }
+        });
+
+        ImageView collapseBtn = (ImageView) mFloatingView.findViewById(R.id.collapse_btn);
+        collapseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapseView();
             }
         });
 
@@ -173,17 +189,24 @@ public class FloatingViewService extends Service
         });
     }
 
+    private void closeView(){
+        stopService(new Intent(getApplicationContext(), FloatingViewService.class));
+    }
+
+    private void collapseView(){
+        mFloatingView.findViewById(R.id.collapse_view).setVisibility(View.VISIBLE);
+        mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+    }
+
     private void closeFloatingView(WindowManager.LayoutParams params) {
         if ((params.x >= 500 && params.x <= 615) && (params.y >= 170 && params.y <= 230)) {
             // System.out.print("\nTrashCan position: x - " + params.x + "y - " +params.y);
-            System.out.print("\nTrashCan position: true");
-
+          //  System.out.print("\nTrashCan position: true");
             stopSelf();
         } else {
-            System.out.print("\nTrashCan position: false");
+          //  System.out.print("\nTrashCan position: false");
         }
     }
-
 
     private double getIntervalValue() {
         double mAngle;
@@ -247,16 +270,21 @@ public class FloatingViewService extends Service
                 R.array.intervals_array, android.R.layout.simple_spinner_item);
         adapterFrameRate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrameRate.setAdapter(adapterFrameRate);
-
         spinnerFrameRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @SuppressLint("SetTextI18n")
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
                 String[] option = getResources().getStringArray(R.array.intervals_array);
-                numOfFrames = Integer.parseInt(option[selectedItemPosition]);
-                framesCounterTV.setText(0 + "/" + numOfFrames);
+                if (selectedItemPosition == 4) {
+                    startActivity(new Intent(FloatingViewService.this,
+                            DurationDialogActivity.class));
+                    option[4] = "";
+                    collapseView();
+                } else {
+                    numOfFrames = Integer.parseInt(option[selectedItemPosition]);
+                    framesCounterTV.setText(0 + "/" + numOfFrames);
+                }
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });

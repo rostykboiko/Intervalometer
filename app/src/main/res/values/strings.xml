@@ -8,7 +8,6 @@
     <!--MainActivity-->
     <string name="on_title_txt">On</string>
 
-
     <!--Dialog-->
     <string name="dialog_title">Intervalometer</string>
     <string name="more_info_txt">More info</string>
@@ -22,29 +21,12 @@
         <item>Power</item>
     </string-array>
 
-    <string-array name="duration_array">
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>10</item>
-        <item>Custom</item>
-    </string-array>
-
     <string-array name="intervals_array">
         <item>120</item>
         <item>180</item>
         <item>240</item>
         <item>360</item>
         <item>Custom</item>
-    </string-array>
-
-    <string-array name="frame_rates_array">
-        <item>25fps</item>
-        <item>30fps</item>
-        <item>50fps</item>
-        <item>60fps</item>
-        <item>Custon</item>
     </string-array>
 
     <string name="service_active">active</string>
@@ -64,5 +46,27 @@
     <string name="result_return">Return to home</string>
     <string name="TimerDummy">0:00:00</string>
 
+    <!--DurationPicker Activity Start-->
+    <string name="time_hour_00" translatable="false">0</string>
+    <string name="time_hour_desc">h</string>
+    <string name="time_minutes_00" translatable="false">00</string>
+    <string name="time_minutes_desc">m</string>
+    <string name="time_seconds_00" translatable="false">00</string>
+    <string name="time_seconds_desc">s</string>
+    <string name="deleteBtn" translatable="false">time_picker_deleteBtn</string>
 
+    <string name="time_picker_1" translatable="false">1</string>
+    <string name="time_picker_2" translatable="false">2</string>
+    <string name="time_picker_3" translatable="false">3</string>
+    <string name="time_picker_4" translatable="false">4</string>
+    <string name="time_picker_5" translatable="false">5</string>
+    <string name="time_picker_6" translatable="false">6</string>
+    <string name="time_picker_7" translatable="false">7</string>
+    <string name="time_picker_8" translatable="false">8</string>
+    <string name="time_picker_9" translatable="false">9</string>
+    <string name="time_picker_0" translatable="false">0</string>
+    <string name="time_picker_button1">Cancel</string>
+    <string name="time_picker_button2">Save</string>
+    <string name="frame_counter_tv">0/</string>
+    <!--DurationPicker Activity End-->
 </resources>
