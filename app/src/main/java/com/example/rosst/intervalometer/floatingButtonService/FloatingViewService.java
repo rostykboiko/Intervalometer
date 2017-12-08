@@ -11,16 +11,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.rosst.intervalometer.R;
+import com.example.rosst.intervalometer.horizontalWheel.HorizontalWheelView;
 import com.example.rosst.intervalometer.main.MainActivity;
 import com.example.rosst.intervalometer.dialog.DurationDialogActivity;
 import com.example.rosst.intervalometer.utilities.Callback;
-import com.github.shchurov.horizontalwheelview.HorizontalWheelView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,9 +54,9 @@ public class FloatingViewService extends Service
         super.onCreate();
         initFloatingView();
 
-        horizontalWheelView = (HorizontalWheelView) mFloatingView.findViewById(R.id.shutter_wheel);
-        durationTV = (TextView) mFloatingView.findViewById(R.id.duration_counter_tv);
-        framesCounterTV = (TextView) mFloatingView.findViewById(R.id.frames_counter_tv);
+        horizontalWheelView = mFloatingView.findViewById(R.id.shutter_wheel);
+        durationTV = mFloatingView.findViewById(R.id.duration_counter_tv);
+        framesCounterTV = mFloatingView.findViewById(R.id.frames_counter_tv);
 
         durationTask.registerCallBack(this);
         intervalometerTask.registerCallBack(this);
@@ -65,13 +64,14 @@ public class FloatingViewService extends Service
         viewOn();
         updateUi();
         initButtons();
-        setupListeners();
+        setUpListeners();
         initSpinnerMenus();
         getIntervalValue();
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getExtras() != null) {
+        if (intent != null && intent.getExtras() != null
+                && !intent.getStringExtra("Custom Frames").equals("Custom")) {
             String frameString = getString(R.string.frame_counter_tv) + intent.getStringExtra("Custom Frames");
             framesCounterTV.setText(frameString);
             spinnerOptions.set(4, intent.getStringExtra("Custom Frames"));
@@ -79,14 +79,14 @@ public class FloatingViewService extends Service
 
             spinnerAdapter.notifyDataSetChanged();
 
-            System.out.println("Floating intent " + intent.getStringExtra("Custom Frames") + "||" +
-                    framesCounterTV);
-        }
+            expandView();
+        } else expandView();
+
         return Service.START_STICKY;
     }
 
     private void initButtons() {
-        TextView openButton = (TextView) mFloatingView.findViewById(R.id.info_tv);
+        TextView openButton = mFloatingView.findViewById(R.id.info_tv);
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +99,7 @@ public class FloatingViewService extends Service
             }
         });
 
-        TextView startButton = (TextView) mFloatingView.findViewById(R.id.start_tv);
+        TextView startButton = mFloatingView.findViewById(R.id.start_tv);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +107,7 @@ public class FloatingViewService extends Service
             }
         });
 
-        TextView stopButton = (TextView) mFloatingView.findViewById(R.id.stop_tv);
+        TextView stopButton = mFloatingView.findViewById(R.id.stop_tv);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +121,7 @@ public class FloatingViewService extends Service
         mFloatingView = LayoutInflater.from(FloatingViewService.this)
                 .inflate(R.layout.layout_floating_widget, null);
 
-        shutterValue = (TextView) mFloatingView.findViewById(R.id.shutter_value);
+        shutterValue = mFloatingView.findViewById(R.id.shutter_value);
 
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -141,7 +141,7 @@ public class FloatingViewService extends Service
         final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
 
-        ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_btn);
+        ImageView closeButton = mFloatingView.findViewById(R.id.close_btn);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +149,7 @@ public class FloatingViewService extends Service
             }
         });
 
-        ImageView collapseBtn = (ImageView) mFloatingView.findViewById(R.id.collapse_btn);
+        ImageView collapseBtn = mFloatingView.findViewById(R.id.collapse_btn);
         collapseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,8 +190,6 @@ public class FloatingViewService extends Service
                         params.x = initialX + (int) (event.getRawX() - initialTouchX);
                         params.y = initialY - (int) (event.getRawY() - initialTouchY);
 
-                        closeFloatingView(params);
-
                         mWindowManager.updateViewLayout(mFloatingView, params);
                         return true;
                 }
@@ -209,14 +207,9 @@ public class FloatingViewService extends Service
         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
     }
 
-    private void closeFloatingView(WindowManager.LayoutParams params) {
-        if ((params.x >= 500 && params.x <= 615) && (params.y >= 170 && params.y <= 230)) {
-            // System.out.print("\nTrashCan position: x - " + params.x + "y - " +params.y);
-            //  System.out.print("\nTrashCan position: true");
-            stopSelf();
-        } else {
-            //  System.out.print("\nTrashCan position: false");
-        }
+    private void expandView() {
+        mFloatingView.findViewById(R.id.collapse_view).setVisibility(View.GONE);
+        mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
     }
 
     private double getIntervalValue() {
@@ -276,7 +269,7 @@ public class FloatingViewService extends Service
         String[] myResArray = getResources().getStringArray(R.array.intervals_array);
         spinnerOptions = Arrays.asList(myResArray);
 
-        Spinner spinnerFrameRate = (Spinner) mFloatingView.findViewById(R.id.spinner_intervals);
+        Spinner spinnerFrameRate = mFloatingView.findViewById(R.id.spinner_intervals);
         spinnerAdapter = new SpinnerAdapter(spinnerOptions, FloatingViewService.this);
         spinnerFrameRate.setAdapter(spinnerAdapter);
 
@@ -288,6 +281,7 @@ public class FloatingViewService extends Service
                     startActivity(new Intent(FloatingViewService.this, DurationDialogActivity.class));
                     framesCounterTV.getText();
                     collapseView();
+                    mFloatingView.findViewById(R.id.collapse_view).setVisibility(View.GONE);
                 } else {
                     numOfFrames = Integer.parseInt(spinnerOptions.get(selectedItemPosition));
                     framesCounterTV.setText(0 + "/" + numOfFrames);
@@ -299,7 +293,7 @@ public class FloatingViewService extends Service
         });
     }
 
-    private void setupListeners() {
+    private void setUpListeners() {
         horizontalWheelView.setListener(new HorizontalWheelView.Listener() {
             @Override
             public void onRotationChanged(double radians) {
@@ -357,4 +351,5 @@ public class FloatingViewService extends Service
 
         durationTV.setText(durationStr);
     }
+
 }

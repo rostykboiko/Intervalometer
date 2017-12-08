@@ -9,26 +9,24 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
-import com.example.rosst.intervalometer.floatingButtonService.SpinnerAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.example.rosst.intervalometer.utilities.CameraLauncher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
 
     public static Handler UIHandler;
 
-    static {UIHandler = new Handler(Looper.getMainLooper());}
+    static {
+        UIHandler = new Handler(Looper.getMainLooper());
+    }
 
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
@@ -53,6 +51,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.shortcut)
+    public void createShortcutOfApp() {
+        Intent shortcutIntent = new Intent(getApplicationContext(),
+                CameraLauncher.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+
+        Intent addIntent = new Intent();
+        addIntent
+                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "App shortcut name");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(),
+                        R.mipmap.ic_launcher_round));
+
+        addIntent
+                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        addIntent.putExtra("duplicate", false);  //may it's already there so   don't duplicate
+        getApplicationContext().sendBroadcast(addIntent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -64,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
-        final Intent floatingButton = new Intent(MainActivity.this, FloatingViewService.class);
-
+        final Intent floatingButton = new Intent(MainActivity.this,
+                FloatingViewService.class);
         onSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onSwitch.isChecked()) {
-                    startService(floatingButton);
-                    finish();
+                    CameraLauncher.cameraLauncher(MainActivity.this);
+                    moveTaskToBack(true);
                 } else {
                     stopService(floatingButton);
                 }

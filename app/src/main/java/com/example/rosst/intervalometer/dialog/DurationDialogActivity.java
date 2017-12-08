@@ -64,6 +64,7 @@ public class DurationDialogActivity extends AppCompatActivity {
     }
 
 
+    @SuppressWarnings("SameParameterValue")
     private void setStatusBarDim(boolean dim) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(dim ? Color.TRANSPARENT :
@@ -168,18 +169,19 @@ public class DurationDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                finish();
             }
         });
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    final Intent floatingButton = new
-                            Intent(DurationDialogActivity.this, FloatingViewService.class);
+                if (!numOfFrames.getText().toString().equals("0")) {
+                    final Intent floatingButton = new Intent(
+                            DurationDialogActivity.this, FloatingViewService.class);
                     floatingButton.putExtra("Custom Frames", numOfFrames.getText().toString());
                     startService(floatingButton);
-                finish();
+                    finish();
+                }
             }
         });
 
@@ -193,9 +195,20 @@ public class DurationDialogActivity extends AppCompatActivity {
         deleteButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                numOfFrames.setText(R.string.time_seconds_00);
+                framesString = "0";
+                numOfFrames.setText(framesString);
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        final Intent floatingButton = new
+                Intent(DurationDialogActivity.this, FloatingViewService.class);
+        floatingButton.putExtra("Custom Frames", "Custom");
+        startService(floatingButton);
+        finish();
     }
 }
