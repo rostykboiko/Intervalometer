@@ -4,19 +4,24 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
 
 public class CameraLauncher extends Activity {
+    private static SharedPreferences cameraNamePref;
+    private static SharedPreferences cameraPackagePref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        checkCameraApp();
         cameraLauncher(this);
         finish();
     }
@@ -31,7 +36,16 @@ public class CameraLauncher extends Activity {
             final ResolveInfo mInfo = pm.resolveActivity(i, 0);
 
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+
+//            if (!cameraNamePref.toString().equals("Default") &&
+//                    !cameraPackagePref.toString().equals("Default")) {
+//                intent.setComponent(new ComponentName(
+//                        cameraPackagePref.toString(), cameraNamePref.toString()));
+//            } else {
+                intent.setComponent(new ComponentName(
+                        mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+           // }
+
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -40,6 +54,14 @@ public class CameraLauncher extends Activity {
         } catch (Exception e) {
             System.out.println("MainActivity camera Exception " + e);
         }
+    }
+
+    private void checkCameraApp() {
+        cameraNamePref = this.getSharedPreferences(
+                getString(R.string.camera_app_name), Context.MODE_PRIVATE);
+
+        cameraPackagePref = this.getSharedPreferences(
+                getString(R.string.camera_app_package), Context.MODE_PRIVATE);
     }
 
 }

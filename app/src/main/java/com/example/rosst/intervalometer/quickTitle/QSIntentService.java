@@ -15,7 +15,7 @@ public class QSIntentService
         boolean isCurrentlyLocked = this.isLocked();
 
         if (!isCurrentlyLocked) {
-            CameraLauncher.cameraLauncher(getApplicationContext());
+            CameraLauncher.cameraLauncher(this);
         }
     }
 }

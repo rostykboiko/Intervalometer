@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Switch;
@@ -21,7 +22,6 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
-
     public static Handler UIHandler;
 
     static {
@@ -58,16 +58,13 @@ public class MainActivity extends AppCompatActivity {
         shortcutIntent.setAction(Intent.ACTION_MAIN);
 
         Intent addIntent = new Intent();
-        addIntent
-                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "App shortcut name");
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                 Intent.ShortcutIconResource.fromContext(getApplicationContext(),
                         R.mipmap.ic_launcher_round));
-
-        addIntent
-                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        addIntent.putExtra("duplicate", false);  //may it's already there so   don't duplicate
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        addIntent.putExtra("duplicate", false);
         getApplicationContext().sendBroadcast(addIntent);
     }
 
@@ -95,5 +92,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @OnClick(R.id.appToLaunch)
+    public void selectCameraApp(){
+        FragmentManager manager = getSupportFragmentManager();
+        PkgListFragment myDialogFragment = new PkgListFragment();
+        myDialogFragment.show(manager, "dialog");
     }
 }

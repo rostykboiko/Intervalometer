@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/on_layout">
+        android:layout_below="@id/on_layout">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/language_title"
+                android:id="@+id/shortcut_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -55,19 +55,63 @@
                 android:textSize="@dimen/text_size_standard" />
 
             <TextView
-                android:id="@+id/language_desc"
+                android:id="@+id/shortcut_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_medium"
                 android:text="Create shortcut at your home screen"
                 android:textSize="@dimen/text_size_secondary" />
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/margin_1dp"-->
-                <!--android:background="@color/colorDivider"/>-->
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_1dp"
+            android:background="@color/colorDivider"/>
         </LinearLayout>
 
     </LinearLayout>
 
+    <LinearLayout android:id="@+id/appToLaunch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/shortcut">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pkg_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/margin_large"
+                android:text="Camera App"
+                android:textSize="@dimen/text_size_standard" />
+
+            <TextView
+                android:id="@+id/pkg_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:text="Auto launch selected camera application"
+                android:textSize="@dimen/text_size_secondary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_1dp"
+                android:background="@color/colorDivider"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="24dp"
+        android:layout_weight="1">
+    </FrameLayout>
 </RelativeLayout>

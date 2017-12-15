@@ -64,7 +64,6 @@
     <string name="title_activity_camera">CameraActivity</string>
     <!--DurationPicker Activity End-->
 
-
     <!-- Camera Activity -->
     <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>
     <string name="camera_permission_not_granted">Camera app cannot do anything without camera permission.</string>
@@ -75,4 +74,9 @@
     <string name="flash_auto">Flash auto</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
+
+    <!-- SharedPref -->
+    <string name="camera_app_name">Default</string>
+    <string name="camera_app_package">Default</string>
+
 </resources>
