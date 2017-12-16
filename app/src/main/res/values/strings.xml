@@ -76,7 +76,10 @@
     <string name="flash_on">Flash on</string>
 
     <!-- SharedPref -->
-    <string name="camera_app_name">Default</string>
-    <string name="camera_app_package">Default</string>
+    <string name="camera_app_name">CameraName</string>
+    <string name="camera_app_package">CameraPackage</string>
+    <string name="camera_app_name_default">Camera</string>
+    <string name="camera_app_package_default">CameraPackage</string>
+    <string name="preference_file_key">1</string>
 
 </resources>

@@ -7,8 +7,6 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
-import com.example.rosst.intervalometer.main.MainActivity;
-
 import java.util.List;
 
 public class Utils {

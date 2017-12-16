@@ -61,13 +61,15 @@ public class PkgListFragment extends DialogFragment {
                         mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences sharedPref = context.getSharedPreferences(
+                                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString(getString(R.string.camera_app_name),
                                 appListInfo.get(position).activityInfo.name);
                         editor.putString(getString(R.string.camera_app_package),
                                 appListInfo.get(position).activityInfo.packageName);
                         editor.apply();
+                        editor.commit();
                     }
 
                     @Override
@@ -77,4 +79,6 @@ public class PkgListFragment extends DialogFragment {
                 })
         );
     }
+
+
 }

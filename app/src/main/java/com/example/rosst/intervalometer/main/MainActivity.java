@@ -1,5 +1,6 @@
 package com.example.rosst.intervalometer.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (onSwitch.isChecked()) {
-                    CameraLauncher.cameraLauncher(MainActivity.this);
+                    startActivity(new Intent(MainActivity.this, CameraLauncher.class));
                     moveTaskToBack(true);
                 } else {
                     stopService(floatingButton);
