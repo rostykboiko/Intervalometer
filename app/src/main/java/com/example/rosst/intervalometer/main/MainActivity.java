@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             initializeView();
         }
-        selectCameraApp();
+        setCameraAppTitle();
     }
 
     @OnClick(R.id.shortcut)
