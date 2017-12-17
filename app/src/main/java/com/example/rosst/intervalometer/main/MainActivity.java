@@ -24,7 +24,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
     public static Handler UIHandler;
-
+    private FragmentManager manager;
+    private PkgListFragment myDialogFragment;
     static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
@@ -97,8 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.appToLaunch)
     public void selectCameraApp(){
-        FragmentManager manager = getSupportFragmentManager();
-        PkgListFragment myDialogFragment = new PkgListFragment();
+        manager = getSupportFragmentManager();
+        myDialogFragment = new PkgListFragment();
         myDialogFragment.show(manager, "dialog");
+    }
+
+    @Override
+    public void onBackPressed() {
+        manager.beginTransaction().remove(myDialogFragment).commit();
     }
 }
