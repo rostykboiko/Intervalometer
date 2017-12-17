@@ -2,6 +2,7 @@ package com.example.rosst.intervalometer.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static Handler UIHandler;
     private FragmentManager manager;
     private PkgListFragment myDialogFragment;
+
     static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.on_switch)
     Switch onSwitch;
+    @BindView(R.id.pkg_desc)
+    TextView cameraApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             initializeView();
         }
+        selectCameraApp();
     }
 
     @OnClick(R.id.shortcut)
@@ -105,6 +111,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        setCameraAppTitle();
         manager.beginTransaction().remove(myDialogFragment).commit();
+    }
+
+    private void setCameraAppTitle(){
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String cameraNamePref = sharedPref.getString(getString(R.string.camera_app_name),
+                getResources().getString(R.string.camera_app_name_default));
+        if (!cameraNamePref.equals("Camera"))
+            cameraApp.setText(cameraNamePref);
     }
 }

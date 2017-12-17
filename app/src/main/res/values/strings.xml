@@ -6,7 +6,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main">MainActivity</string>
 
-    SettingsActivityvity-->
+    <!--SettingsActivity-->
     <string name="on_title_txt">On</string>
 
     <!--Dialog-->
@@ -62,7 +62,13 @@
     <string name="frame_counter_tv">0/</string>
 
     <string name="title_activity_camera">CameraActivity</string>
-    <!--DurationPicker Activity End-->
+
+    <!-- Main Menu-->
+    <string name="shortcut_title">ShortCut</string>
+    <string name="shortcut_desc">Create shortcut at your home screen</string>
+    <string name="camera_app_title">Camera App</string>
+    <string name="camera_app_desc">Auto launch selected camera application</string>
+
 
     <!-- Camera Activity -->
     <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>

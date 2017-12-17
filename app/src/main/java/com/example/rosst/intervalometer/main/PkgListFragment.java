@@ -27,7 +27,6 @@ public class PkgListFragment extends DialogFragment{
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog, container, false);
 
-
         onActivityCreated(savedInstanceState);
         initRecycleView(v);
         return v;
@@ -71,6 +70,8 @@ public class PkgListFragment extends DialogFragment{
                                 appListInfo.get(position).activityInfo.packageName);
                         editor.apply();
                         editor.commit();
+
+                        getActivity().onBackPressed();
                     }
 
                     @Override
