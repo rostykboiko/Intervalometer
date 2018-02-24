@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="24dp"
     android:layout_weight="1"
-    android:orientation="vertical"
-    android:background="@drawable/dialog_bg">
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@drawable/dialog_bg"
         android:elegantTextHeight="true"
         android:paddingEnd="@dimen/margin_small"
         android:paddingStart="@dimen/margin_normal"
@@ -20,8 +19,9 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/dialog_bg"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

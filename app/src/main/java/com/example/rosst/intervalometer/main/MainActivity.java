@@ -1,8 +1,11 @@
 package com.example.rosst.intervalometer.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,14 +13,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
 import com.example.rosst.intervalometer.utilities.CameraLauncher;
+import com.example.rosst.intervalometer.utilities.RootCheckerUtil;
+import com.example.rosst.intervalometer.utilities.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     Switch onSwitch;
     @BindView(R.id.pkg_desc)
     TextView cameraApp;
+    @BindView(R.id.root_desc)
+    TextView rootDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +65,32 @@ public class MainActivity extends AppCompatActivity {
         } else {
             initializeView();
         }
+
+
+        checkRootStatus();
         setCameraAppTitle();
+    }
+
+    private void checkRootStatus() {
+        if (!RootCheckerUtil.isDeviceRooted()) {
+            rootDesc.setText(R.string.root_status_desc_err);
+        }
+    }
+
+    @OnClick(R.id.rootStatus)
+    public void rootHintDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.root_status_title)
+                .setMessage(R.string.root_dialog_hint);
+
+        builder.setPositiveButton(R.string.root_dialog_button_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @OnClick(R.id.shortcut)
@@ -67,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent addIntent = new Intent();
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "App shortcut name");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Intervals");
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                 Intent.ShortcutIconResource.fromContext(getApplicationContext(),
                         R.mipmap.ic_launcher_round));
@@ -103,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.appToLaunch)
-    public void selectCameraApp(){
+    public void selectCameraApp() {
         manager = getSupportFragmentManager();
         myDialogFragment = new PkgListFragment();
         myDialogFragment.show(manager, "dialog");
@@ -115,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         manager.beginTransaction().remove(myDialogFragment).commit();
     }
 
-    private void setCameraAppTitle(){
+    private void setCameraAppTitle() {
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 

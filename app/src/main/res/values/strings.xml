@@ -68,6 +68,12 @@
     <string name="shortcut_desc">Create shortcut at your home screen</string>
     <string name="camera_app_title">Camera App</string>
     <string name="camera_app_desc">Auto launch selected camera application</string>
+    <string name="root_status_title">Root Status</string>
+    <string name="root_status_desc">Your device is rooted</string>
+    <string name="root_status_desc_err">Your device isn`t rooted</string>
+    <string name="root_dialog_hint">Sorry, you don`t have root access, therefore
+    Intervals may not function properly.</string>
+    <string name="root_dialog_button_ok">OK</string>
 
 
     <!-- Camera Activity -->
