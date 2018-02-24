@@ -145,8 +145,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        setCameraAppTitle();
-        manager.beginTransaction().remove(myDialogFragment).commit();
+        if (myDialogFragment.isVisible()) {
+            setCameraAppTitle();
+            manager.beginTransaction().remove(myDialogFragment).commit();
+        } else super.onBackPressed();
     }
 
     private void setCameraAppTitle() {
