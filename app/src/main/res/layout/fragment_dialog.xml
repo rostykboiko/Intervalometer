@@ -4,24 +4,21 @@
     android:layout_height="wrap_content"
     android:layout_margin="24dp"
     android:layout_weight="1"
+    android:background="@drawable/dialog_bg"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/search_view"
+    <LinearLayout
+        android:id="@+id/list_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dialog_bg"
-        android:elegantTextHeight="true"
-        android:paddingEnd="@dimen/margin_small"
-        android:paddingStart="@dimen/margin_normal"
-        android:textColorHint="@color/colorSecondaryText"
-        android:textSize="@dimen/text_size_standard" />
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/dialog_bg"
-        android:scrollbars="vertical" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dialog_bg"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 
 </LinearLayout>

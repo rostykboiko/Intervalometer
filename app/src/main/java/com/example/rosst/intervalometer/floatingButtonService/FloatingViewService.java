@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.horizontalWheel.HorizontalWheelView;
+import com.example.rosst.intervalometer.intervalometer.IntervalometerTask;
 import com.example.rosst.intervalometer.main.MainActivity;
 import com.example.rosst.intervalometer.dialog.DurationDialogActivity;
 import com.example.rosst.intervalometer.utilities.Callback;
