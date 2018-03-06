@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private AboutDialogFragment aboutDialogFragment;
     private final Intent floatingButton = new Intent(MainActivity.this,
             FloatingViewService.class);
+
     static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.on_layout)
-    public void onSwitchRowClick(){
+    public void onSwitchRowClick() {
         if (onSwitch.isChecked()) {
             startActivity(new Intent(MainActivity.this, CameraLauncher.class));
             moveTaskToBack(true);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.about)
-    public void onAboutRowClick(){
+    public void onAboutRowClick() {
         manager = getSupportFragmentManager();
         aboutDialogFragment = new AboutDialogFragment();
         aboutDialogFragment.show(manager, "dialog");
@@ -123,8 +124,12 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.rootStatus)
     public void rootHintDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.root_status_title)
-                .setMessage(R.string.root_status_desc);
+        builder.setTitle(R.string.root_status_title);
+        if (RootCheckerUtil.isDeviceRooted()) {
+            builder.setMessage(R.string.root_status_desc);
+        } else {
+            builder.setMessage(R.string.root_dialog_text);
+        }
 
         builder.setPositiveButton(R.string.root_dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
