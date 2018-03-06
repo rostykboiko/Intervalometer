@@ -1,4 +1,4 @@
-package com.example.rosst.intervalometer.main;
+package com.example.rosst.intervalometer.main.appListDialog;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

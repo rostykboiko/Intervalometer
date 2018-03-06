@@ -1,4 +1,4 @@
-package com.example.rosst.intervalometer.main;
+package com.example.rosst.intervalometer.main.appListDialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;

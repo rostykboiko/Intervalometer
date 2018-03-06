@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,13 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rosst.intervalometer.R;
 import com.example.rosst.intervalometer.floatingButtonService.FloatingViewService;
+import com.example.rosst.intervalometer.main.aboutDialog.AboutDialogFragment;
+import com.example.rosst.intervalometer.main.appListDialog.PkgListFragment;
 import com.example.rosst.intervalometer.utilities.CameraLauncher;
 import com.example.rosst.intervalometer.utilities.RootCheckerUtil;
-import com.example.rosst.intervalometer.utilities.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
     public static Handler UIHandler;
     private FragmentManager manager;
-    private PkgListFragment myDialogFragment;
-
+    private PkgListFragment pkgListFragment;
+    private AboutDialogFragment aboutDialogFragment;
+    private final Intent floatingButton = new Intent(MainActivity.this,
+            FloatingViewService.class);
     static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
@@ -66,9 +66,18 @@ public class MainActivity extends AppCompatActivity {
             initializeView();
         }
 
-
         checkRootStatus();
         setCameraAppTitle();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (FloatingViewService.isViewVisible()) {
+            onSwitch.setChecked(true);
+        } else {
+            onSwitch.setChecked(false);
+        }
     }
 
     private void checkRootStatus() {
@@ -77,20 +86,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.rootStatus)
-    public void rootHintDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.root_status_title)
-                .setMessage(R.string.root_dialog_hint);
+    @OnClick(R.id.on_layout)
+    public void onSwitchRowClick(){
+        if (onSwitch.isChecked()) {
+            startActivity(new Intent(MainActivity.this, CameraLauncher.class));
+            moveTaskToBack(true);
+        } else {
+            stopService(floatingButton);
+        }
+    }
 
-        builder.setPositiveButton(R.string.root_dialog_button_ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    @OnClick(R.id.about)
+    public void onAboutRowClick(){
+        manager = getSupportFragmentManager();
+        aboutDialogFragment = new AboutDialogFragment();
+        aboutDialogFragment.show(manager, "dialog");
     }
 
     @OnClick(R.id.shortcut)
@@ -110,19 +120,23 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().sendBroadcast(addIntent);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (FloatingViewService.isViewVisible()) {
-            onSwitch.setChecked(true);
-        } else {
-            onSwitch.setChecked(false);
-        }
+    @OnClick(R.id.rootStatus)
+    public void rootHintDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.root_status_title)
+                .setMessage(R.string.root_status_desc);
+
+        builder.setPositiveButton(R.string.root_dialog_button_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void initializeView() {
-        final Intent floatingButton = new Intent(MainActivity.this,
-                FloatingViewService.class);
         onSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,15 +153,15 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.appToLaunch)
     public void selectCameraApp() {
         manager = getSupportFragmentManager();
-        myDialogFragment = new PkgListFragment();
-        myDialogFragment.show(manager, "dialog");
+        pkgListFragment = new PkgListFragment();
+        pkgListFragment.show(manager, "dialog");
     }
 
     @Override
     public void onBackPressed() {
-        if (myDialogFragment.isVisible()) {
+        if (pkgListFragment.isVisible()) {
             setCameraAppTitle();
-            manager.beginTransaction().remove(myDialogFragment).commit();
+            manager.beginTransaction().remove(pkgListFragment).commit();
         } else super.onBackPressed();
     }
 

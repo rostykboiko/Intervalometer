@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">Intervalometer</string>
+    <string name="app_name">Intervals</string>
     <string name="quick_tile">Launch Camera</string>
-
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main">MainActivity</string>
@@ -71,21 +70,15 @@
     <string name="root_status_title">Root Status</string>
     <string name="root_status_desc">Your device is rooted</string>
     <string name="root_status_desc_err">Your device isn`t rooted</string>
-    <string name="root_dialog_hint">Sorry, you don`t have root access, therefore
+    <string name="root_dialog_text">Sorry, you don`t have root access, therefore
     Intervals may not function properly.</string>
     <string name="root_dialog_button_ok">OK</string>
-
-
-    <!-- Camera Activity -->
-    <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>
-    <string name="camera_permission_not_granted">Camera app cannot do anything without camera permission.</string>
-    <string name="picture_taken">Picture taken</string>
-    <string name="aspect_ratio">Aspect ratio</string>
-    <string name="switch_flash">Switch flash</string>
-    <string name="switch_camera">Switch camera</string>
-    <string name="flash_auto">Flash auto</string>
-    <string name="flash_off">Flash off</string>
-    <string name="flash_on">Flash on</string>
+    <string name="about_title">About Intervals</string>
+    <string name="about_desc"><![CDATA[<i>About Desc </i>]]></string>
+    <string name="about_dialog_text">This app was created for making photo sequence having only your smartphone.
+        With no need using third-party camera apps.</string>
+    <string name="name">Rostyk Boiko</string>
+    <string name="git_hub"><b>GitHub</b> - github.com/rostykboiko</string>
 
     <!-- SharedPref -->
     <string name="camera_app_name">CameraName</string>
