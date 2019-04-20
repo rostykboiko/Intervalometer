@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "com.example.rosst.intervalometer"
         minSdkVersion 21
@@ -40,5 +39,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'
     // Progress Bar
-    compile 'com.jpardogo.googleprogressbar:library:1.2.0'
+    implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
 }
